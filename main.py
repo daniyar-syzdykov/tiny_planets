@@ -1,7 +1,8 @@
+import cmath
+import numpy as np
 import sys, os
 import random
 from string import ascii_lowercase
-from typing import NamedTuple
 import pygame
 from planets import Body, Color, Pos
 from physics import Engine
@@ -10,7 +11,7 @@ from physics import Engine
 pygame.init()
 pygame.display.set_caption('Sumilation')
 
-SIZE = HEIGHT, WIDTH = 1000, 1000
+SIZE = HEIGHT, WIDTH = 800, 800
 FPS = 60
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
@@ -51,9 +52,17 @@ def main():
                 sys.exit()
         clock.tick(FPS)
         screen.fill(black)
-        for planet in planets:
-            pygame.draw.circle(screen, planet.color, planet.position, planet.radius)
-        engine.update_planets(planets)
+        for i in np.arange(0, 4 * cmath.pi, 0.001):
+            s_x = i * 100
+            s_y = cmath.sin(i).real * 100
+            c_y = cmath.cos(i).real * 100
+            t_y = cmath.tan(i).real * 100
+            #pygame.draw.circle(screen, (255,255,255), (s_x, s_y + HEIGHT / 2), 1)
+            #pygame.draw.circle(screen, (255,255,255), (s_x, c_y + HEIGHT / 2), 1)
+            pygame.draw.circle(screen, (255,255,255), (s_x, t_y + HEIGHT / 2), 1)
+        #for planet in planets:
+        #    pygame.draw.circle(screen, planet.color, planet.position, planet.radius)
+        #engine.update_planets(planets)
         pygame.display.flip()
 
 
