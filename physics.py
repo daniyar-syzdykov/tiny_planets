@@ -20,6 +20,7 @@ class Engine:
 
     def update_planets(self, planets: list[Body]) -> list[Body]:
         for planet in planets:
-            for forces in planets:
-                self.calculate_physics(planet, forces)
+            planet.position = Pos(planet.position.x + 1, planet.position.y)
+            #for forces in planets:
+            #    self.calculate_physics(planet, forces)
         return planets

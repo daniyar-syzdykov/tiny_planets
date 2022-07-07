@@ -1,3 +1,4 @@
+import time
 import cmath
 import numpy as np
 import sys, os
@@ -41,10 +42,22 @@ def create_new_planets(n: int) -> list[Body]:
         surficies.append(planet)
     return surficies 
 
+def create_path():
+    path = []
+    for i in np.arange(0, 4 * cmath.pi, 0.001):
+        x = i * 100
+        s_y = cmath.sin(i).real * 100
+        c_y = cmath.cos(i).real * 100
+        t_y = cmath.tan(i).real * 100
+        path.append((x, s_y))
+    return path
+
 
 def main():
-    planets = create_new_planets(2)
+    planets = create_new_planets(8)
     engine = Engine()
+    ptr = pygame.Surface((10, 10))
+    ptr.fill((255,255,255))
     while True:
         for even in pygame.event.get():
             if even.type == pygame.QUIT:
@@ -52,17 +65,13 @@ def main():
                 sys.exit()
         clock.tick(FPS)
         screen.fill(black)
-        for i in np.arange(0, 4 * cmath.pi, 0.001):
-            s_x = i * 100
-            s_y = cmath.sin(i).real * 100
-            c_y = cmath.cos(i).real * 100
-            t_y = cmath.tan(i).real * 100
-            #pygame.draw.circle(screen, (255,255,255), (s_x, s_y + HEIGHT / 2), 1)
-            #pygame.draw.circle(screen, (255,255,255), (s_x, c_y + HEIGHT / 2), 1)
-            pygame.draw.circle(screen, (255,255,255), (s_x, t_y + HEIGHT / 2), 1)
-        #for planet in planets:
-        #    pygame.draw.circle(screen, planet.color, planet.position, planet.radius)
-        #engine.update_planets(planets)
+        path = create_path()
+        #for p in path:
+        #    screen.blit(ptr, (p[0],p[1] + HEIGHT / 2))
+            #pygame.draw.circle(screen, (255,255,255), (s_x - i, t_y + HEIGHT / 2), 1)
+        for planet in planets:
+            pygame.draw.circle(screen, planet.color, planet.position, planet.radius)
+        engine.update_planets(planets)
         pygame.display.flip()
 
 
