@@ -13,7 +13,7 @@ from physics import Engine
 pygame.init()
 pygame.display.set_caption('Sumilation')
 
-SIZE = HEIGHT, WIDTH = 800, 800
+SIZE = HEIGHT, WIDTH = 1000, 1000
 FPS = 60
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
@@ -28,18 +28,21 @@ def create_new_planets(n: int) -> list[Body]:
     surficies: list[Body] = []
     for _ in range(n):
         name = ''.join([random.choice(ascii_lowercase) for _ in range(10)])
-        radius = 30.0
+        radius = 20.0
         color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         mass = random.random()
-        velocity = random.random()
-        position = pygame.Vector2(random.randrange(100, 900), random.randrange(100, 900))
+        #velocity = pygame.Vector2(random.random(), random.random())
+        velocity = pygame.Vector2(-1, -1)
+        position = pygame.Vector2(random.randrange(100, 600), random.randrange(100, 600))
+        gravity = random.uniform(0, 1)
         planet = Body(
             name=name, 
             radius=radius,
             color=color, 
             mass=mass, 
             velocity=velocity, 
-            position=position
+            position=position,
+            gravity=gravity
         )
         surficies.append(planet)
     return surficies 
@@ -57,32 +60,41 @@ def create_path():
         path.append((x, y)) 
     return path
 
+SUN = Body(
+    name='SUN', 
+    radius=33.0,
+    color=Color(255,255,0), 
+    mass=10, 
+    velocity=pygame.Vector2(0, 0), 
+    position=pygame.Vector2(HEIGHT / 2, WIDTH / 2),
+    gravity=5
+)
 
 def main():
-    planets = create_new_planets(4)
+    planets = create_new_planets(1)
     engine = Engine()
     point = pygame.Surface((50, 50))
     point.fill((255,255,255))
     path = create_path()
     look_vector = pygame.Vector2(1,1)
+    cnt = 0
     while True:
+        cnt += 1
         screen.fill(black)
         mouse_pos = pygame.mouse.get_pos()
         for even in pygame.event.get():
             if even.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        center = pygame.Vector2(HEIGHT / 2, WIDTH / 2) 
-        delta = mouse_pos - center
-        angle_to_cursor = math.atan2(delta.y, delta.x)
-        look_vector.xy = (10*math.cos(angle_to_cursor), 10*math.sin(angle_to_cursor))
+        #center = pygame.Vector2(HEIGHT / 2, WIDTH / 2) 
+        pygame.draw.circle(screen, SUN.color, SUN.position, SUN.radius)
         for p in planets:
-            delta:pygame.Vector2 = mouse_pos - p.position
+            delta:pygame.Vector2 = SUN.position - p.position
             angle_to_cursor = math.atan2(delta.y, delta.x)
             look_vector.xy = (10*math.cos(angle_to_cursor), 10*math.sin(angle_to_cursor))
+            engine.update_planet(p, look_vector, SUN)
             pygame.draw.circle(screen, p.color, p.position, p.radius)
-        engine.update_planets(planets, look_vector)
-        #pygame.draw.line(screen, (255,255,255), center + look_vector, 3)
+            pygame.draw.line(screen, (255,0,255),p.position, p.position + p.velocity * 8, 2)
 
 
 

@@ -14,13 +14,14 @@ class Color(NamedTuple):
     b: int
 
 class Body:
-    def __init__(self, *, name: str, radius: float, color: Color, mass: float, velocity: float, position: pygame.Vector2) -> None:
+    def __init__(self, *, name: str, radius: float, color: Color, mass: float, velocity: pygame.Vector2, position: pygame.Vector2, gravity: float) -> None:
         self.name: str = name
         self.radius: float = radius
         self.color: Color = color
         self.mass: float = mass
-        self.velocity: float = velocity
+        self.velocity: pygame.Vector2 = velocity
         self.position: pygame.Vector2 = position
+        self.gravity: float = gravity
 
     def angle_to(self, planet) -> float:
         angle = self.velocity / planet.velocity
