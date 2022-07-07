@@ -1,7 +1,7 @@
 import random
 from string import ascii_lowercase
 from typing import NamedTuple, Union
-
+import pygame
 
 class Pos(NamedTuple):
     x: Union[int, float]
@@ -14,13 +14,13 @@ class Color(NamedTuple):
     b: int
 
 class Body:
-    def __init__(self, *, name: str, radius: float, color: Color, mass: float, velocity: float, position: Pos) -> None:
+    def __init__(self, *, name: str, radius: float, color: Color, mass: float, velocity: float, position: pygame.Vector2) -> None:
         self.name: str = name
         self.radius: float = radius
         self.color: Color = color
         self.mass: float = mass
         self.velocity: float = velocity
-        self.position: Pos = position
+        self.position: pygame.Vector2 = position
 
     def angle_to(self, planet) -> float:
         angle = self.velocity / planet.velocity

@@ -32,7 +32,7 @@ def create_new_planets(n: int) -> list[Body]:
         color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         mass = random.random()
         velocity = random.random()
-        position = Pos(random.randrange(100, 900), random.randrange(100, 900))
+        position = pygame.Vector2(random.randrange(100, 900), random.randrange(100, 900))
         planet = Body(
             name=name, 
             radius=radius,
@@ -59,11 +59,12 @@ def create_path():
 
 
 def main():
-    planets = create_new_planets(8)
+    planets = create_new_planets(4)
     engine = Engine()
     point = pygame.Surface((50, 50))
     point.fill((255,255,255))
     path = create_path()
+    look_vector = pygame.Vector2(1,1)
     while True:
         screen.fill(black)
         mouse_pos = pygame.mouse.get_pos()
@@ -71,9 +72,31 @@ def main():
             if even.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        p = (HEIGHT / 2, WIDTH / 2) 
-        angle_to_cursor = 1 / cmath.sqrt(mouse_pos[0] - p[0] / mouse_pos[1] - p[1])
-        print(angle_to_cursor.real)
+        center = pygame.Vector2(HEIGHT / 2, WIDTH / 2) 
+        delta = mouse_pos - center
+        angle_to_cursor = math.atan2(delta.y, delta.x)
+        look_vector.xy = (10*math.cos(angle_to_cursor), 10*math.sin(angle_to_cursor))
+        for p in planets:
+            delta:pygame.Vector2 = mouse_pos - p.position
+            angle_to_cursor = math.atan2(delta.y, delta.x)
+            look_vector.xy = (10*math.cos(angle_to_cursor), 10*math.sin(angle_to_cursor))
+            pygame.draw.circle(screen, p.color, p.position, p.radius)
+        engine.update_planets(planets, look_vector)
+        #pygame.draw.line(screen, (255,255,255), center + look_vector, 3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #atangent = math.atan2(mouse_pos[1] - p[1], mouse_pos[0] - mouse_pos[0])
         #print(atangent.real)
         #print(cmath.atan(angle_to_cursor))
