@@ -8,6 +8,7 @@ pygame = "*"
 autopep8 = "*"
 mypy = "*"
 numpy = "*"
+psutil = "*"
 
 [dev-packages]
 
