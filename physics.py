@@ -30,28 +30,11 @@ class Engine:
 
     def update_planet(self, planet: Body, sun: Body) -> Body:
         delta:pygame.Vector2 = pygame.Vector2(sun.position - planet.position)
-        angle_to_cursor = math.atan2(delta.y, delta.x)
-        angle = pygame.Vector2(10*math.cos(angle_to_cursor), 10*math.sin(angle_to_cursor))
-        angle.xy = pygame.Vector2(angle.normalize().xy)
+        angle_to_planet = math.atan2(delta.y, delta.x)
+        direction_to_planet = pygame.Vector2(math.cos(angle_to_planet), math.cos(angle_to_planet))
+        print(direction_to_planet)
+        planet.position.xy += direction_to_planet.xy
         
-        #print(f'Angle: {angle.magnitude()}')
-        #print(f'Angle before: {angle}')
-
-        planet.acceliration.xy += pygame.Vector2(angle.x + (sun.gravity + delta.x), angle.y + (sun.gravity + delta.y))
-        planet.acceliration = planet.acceliration.normalize()
-        print(planet.acceliration.xy)
-
-        #print(f'Acceliration: {planet.acceliration}')
-        #planet.acceliration.xy = planet.acceliration.normalize().xy
-        planet.velocity.xy += planet.acceliration.xy
-
-        planet.position.xy = pygame.Vector2(planet.position.xy + angle.xy + planet.velocity)
-
-
-
-
-
-
 
 
 

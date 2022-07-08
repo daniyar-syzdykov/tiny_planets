@@ -13,7 +13,7 @@ from physics import Engine
 pygame.init()
 pygame.display.set_caption('Sumilation')
 
-SIZE = HEIGHT, WIDTH = 1000, 1000
+SIZE = HEIGHT, WIDTH = 600, 600
 FPS = 40
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
@@ -36,7 +36,7 @@ def create_new_planets(n: int) -> list[Body]:
         #position = pygame.Vector2(random.randrange(100, 600), random.randrange(100, 600))
         position = pygame.Vector2(200, 200)
         gravity = random.uniform(0, 1)
-        acceliration=pygame.Vector2(-0.01, 0.01)
+        acceliration=pygame.Vector2(-0.1, 0.1)
         planet = Body(
             name=name, 
             radius=radius,
@@ -64,8 +64,6 @@ SUN = Body(
 def main():
     planets = create_new_planets(1)
     engine = Engine()
-    point = pygame.Surface((50, 50))
-    point.fill((255,255,255))
     while True:
         screen.fill(black)
         mouse_pos = pygame.mouse.get_pos()
@@ -78,10 +76,11 @@ def main():
         for p in planets:
             delta:pygame.Vector2 = pygame.Vector2(SUN.position - p.position)
             angle_to_cursor = math.atan2(delta.y, delta.x)
-            angle = pygame.Vector2(10*math.cos(angle_to_cursor), 10*math.sin(angle_to_cursor))
+            angle = pygame.Vector2(math.cos(angle_to_cursor), math.sin(angle_to_cursor))
+            print(f'main angle: {angle}')
             engine.update_planet(p, SUN)
             pygame.draw.circle(screen, p.color, p.position, p.radius)
-            pygame.draw.line(screen, (255,0,0),p.position, p.velocity + angle * 5, 2)
+            pygame.draw.line(screen, (255,0,0),p.position, angle, 2)
             #pygame.draw.line(screen, (255,255,0),p.position, p.position + p.velocity + angle.xy * 2, 2)
 
 
