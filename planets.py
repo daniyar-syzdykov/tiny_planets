@@ -1,6 +1,7 @@
 import random
 from string import ascii_lowercase
 from typing import NamedTuple, Union
+from dataclasses import dataclass
 import pygame
 
 class Pos(NamedTuple):
@@ -13,8 +14,18 @@ class Color(NamedTuple):
     g: int
     b: int
 
+@dataclass
 class Body:
-    def __init__(self, *, name: str, radius: float, color: Color, mass: float, velocity: pygame.Vector2, position: pygame.Vector2, gravity: float) -> None:
+    GRAVITY_CONST: float = 9.8
+    def __init__(self, *, name: str,
+                radius: float,
+                color: Color,
+                mass: float,
+                velocity: pygame.Vector2,
+                position: pygame.Vector2,
+                gravity: float,
+                acceliration: pygame.Vector2
+    ) -> None:
         self.name: str = name
         self.radius: float = radius
         self.color: Color = color
@@ -22,13 +33,7 @@ class Body:
         self.velocity: pygame.Vector2 = velocity
         self.position: pygame.Vector2 = position
         self.gravity: float = gravity
-
-    def angle_to(self, planet) -> float:
-        angle = self.velocity / planet.velocity
-        return angle
-
-    def distace_to(self, planet):
-        pass
+        self.acceliration: pygame.Vector2 = acceliration 
 
     #def create_new_planets(self, n: int) -> list:
     #    surficies: list[Body] = []
@@ -53,9 +58,23 @@ class Body:
     #        # surficies.append(planet)
     #    return surficies
 
-    def __str__(self) -> str:
-        return self.name
+    # def __str__(self) -> str:
+    #     return self.name
     
-    def __repr__(self) -> str:
-        return f'{self.name}'#, {self.radius}, {self.mass}, {self.speed}'
+    # def __repr__(self) -> str:
+    #     return f'{self.name}'#, {self.radius}, {self.mass}, {self.speed}'
+
+if __name__ == '__main__':
+    body = Body(
+        name='earth',
+        radius=3,
+        color=Color(255,255,255),
+        mass=1,
+        velocity=pygame.Vector2(1, 1),
+        position=pygame.Vector2(1, 1),
+        gravity=3,
+        acceliration=pygame.Vector2(1, 1)
+        )
+    print(body.__repr__())
+
 
