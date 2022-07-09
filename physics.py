@@ -13,9 +13,16 @@ also gravity stornger if planet is closer
 mass of curr planet also effects to speed acceliration and direction of planet
 """
 
-class Vector(NamedTuple):
-    x: float
-    y: float
+#class Vector:
+#    def __init__(self, *, x: float, y: float) -> None:
+#        self.x = x
+#        self.y = y
+#    
+#
+#    def sqrt_distance_to(self, p2: Vector):
+#        return self.x + p2.x, self.y, p2.y
+
+
 
 
 class Engine:
@@ -29,13 +36,8 @@ class Engine:
         pass
 
     def update_planet(self, planet: Body, sun: Body) -> Body:
-        delta:pygame.Vector2 = pygame.Vector2(sun.position - planet.position)
-        angle_to_planet = math.atan2(delta.y, delta.x)
-        direction_to_planet = pygame.Vector2(math.cos(angle_to_planet), math.cos(angle_to_planet))
-        print(direction_to_planet)
-        planet.position.xy += direction_to_planet.xy
+        delta = pygame.Vector2(sun.position - planet.position)
         
-
 
 
         return planet
