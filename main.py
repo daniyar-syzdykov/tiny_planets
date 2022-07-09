@@ -34,7 +34,7 @@ def create_new_planets(n: int) -> list[Body]:
         color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         mass = random.random()
         #velocity = pygame.Vector2(random.random(), random.random())
-        velocity = pygame.Vector2(0, 1)
+        velocity = pygame.Vector2(0, 5)
         #position = pygame.Vector2(random.randrange(100, 600), random.randrange(100, 600))
         position = pygame.Vector2(200, 200)
         gravity = random.uniform(0, 1)
@@ -56,7 +56,7 @@ SUN = Body(
     name='SUN', 
     radius=33.0,
     color=Color(255,255,0), 
-    mass=100, 
+    mass=10000, 
     velocity=pygame.Vector2(0, 0), 
     position=pygame.Vector2(HEIGHT / 2, WIDTH / 2),
     gravity=0.01,
