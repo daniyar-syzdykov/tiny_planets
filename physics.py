@@ -1,10 +1,8 @@
 import math
-import random
-from typing import NamedTuple
-
-from numpy import angle
-from planets import Body, Color, Pos
+from planets import Body
 import pygame
+
+
 """
 velosity is what we add to position
 direction is where we shift volosity vector
@@ -15,52 +13,24 @@ also gravity stornger if planet is closer
 mass of curr planet also effects to speed acceliration and direction of planet
 """
 
-#class Vector:
-#    def __init__(self, *, x: float, y: float) -> None:
-#        self.x = x
-#        self.y = y
-#    
-#
-#    def sqrt_distance_to(self, p2: Vector):
-#        return self.x + p2.x, self.y, p2.y
-
-
-
 
 class Engine:
     def __init__(self) -> None:
         pass
 
-    def normalize_verctor(self, vector: pygame.Vector2):
-        pass
-
-    def calculate_physics(self, planet: Body, planet2: Body) -> Body:
-        pass
-
-    def update_planet(self, planet: Body, sun: Body) -> Body:
-        delta = pygame.Vector2(sun.position - planet.position)
-        #angle = math.atan2(planet.position.y, planet.position.x)
-        angle_to = math.atan2(sun.position.y - planet.position.y, sun.position.x - planet.position.x)
-        #gravity_vector = pygame.Vector2(
-        #                math.cos(angle) * sun.mass / math.sqrt(delta.x ** 2 + delta.y ** 2) ** 2,
-        #                math.sin(angle) * sun.mass / math.sqrt(delta.x ** 2 + delta.y ** 2) ** 2)
-        #gravity_vector.xy = (
-        #                    math.cos(angle_to) * math.sqrt(gravity_vector.x ** 2 + gravity_vector.y ** 2),
-        #                    math.sin(angle_to) * math.sqrt(gravity_vector.x ** 2 + gravity_vector.y ** 2))
-        #print(gravity_vector)
-        #planet.velocity.xy += gravity_vector.xy
-        planet.position.xy += planet.velocity.xy        
-        #for a in range(len(planets)):
-        #    position_angle = math.atan2(planets[a].position.y, planets[a].position.x)
-        #    for b in range(len(planets)):
-        #        if b == a:
-        #            continue
-        #        delta = pygame.Vector2(planets[a].position - planets[b].position)
-        #        #angle_to = math.atan2(sun.position.y - planet.position.y, sun.position.x - planet.position.x)
-                
-
-
-
-
-
-        return planet
+    def update_planet(self, planets: list[Body]) -> list[Body]:
+        for a in range(len(planets)):
+            position_angle = math.atan2(planets[a].position.y, planets[a].position.x)
+            for b in range(len(planets)):
+                if b == a:
+                    continue
+                angle_to = math.atan2(planets[b].position.y - planets[a].position.y, planets[b].position.x - planets[a].position.x)
+                gravity_vector = pygame.Vector2(
+                                math.cos(position_angle) * planets[b].mass / planets[a].position.distance_squared_to(planets[b].position),
+                                math.sin(position_angle) * planets[b].mass / planets[a].position.distance_squared_to(planets[b].position))
+                gravity_vector.xy = pygame.Vector2(
+                                    math.cos(angle_to) * gravity_vector.magnitude(),
+                                    math.sin(angle_to) * gravity_vector.magnitude()).xy
+                planets[a].velocity.xy += gravity_vector.xy
+            planets[a].position.xy += planets[a].velocity.xy        
+        return planets
